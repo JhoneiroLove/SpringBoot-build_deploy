@@ -14,11 +14,12 @@ import java.util.List;
 
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
-@Getter // Lombok
-@NoArgsConstructor // Lombok
-@AllArgsConstructor // Lombok
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
 
-    @Value("${api.security.secret}") // valor de mi propiedad el cual yo quiero extraer ese valor para mi apiSecret
+    @Value("${api.security.secret}")
     private String apiSecret;
 
     public String generarToken(Usuario usuario) {
@@ -40,7 +39,7 @@ public class TokenService {
         }
         DecodedJWT verifier = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC256(apiSecret);
+            Algorithm algorithm = Algorithm.HMAC256(apiSecret); // validando firma
             verifier = JWT.require(algorithm)
                     .withIssuer("voll med")
                     .build()
@@ -50,7 +49,7 @@ public class TokenService {
             System.out.println(exception.toString());
         }
         if (verifier.getSubject() == null) {
-            throw new RuntimeException("verifier invalido");
+            throw new RuntimeException("Verifier invalido");
         }
         return verifier.getSubject();
     }
@@ -58,4 +57,5 @@ public class TokenService {
     private Instant generarFechaExpiracion() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
     }
+
 }

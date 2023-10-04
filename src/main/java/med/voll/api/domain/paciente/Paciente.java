@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.domain.direccion.Direccion;
 
+
 @Table(name = "pacientes")
 @Entity(name = "Paciente")
 @Getter
@@ -14,39 +15,45 @@ import med.voll.api.domain.direccion.Direccion;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Paciente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private String email;
-    private String documentoIdentidad;
+
     private String telefono;
-    private Boolean activo;
+
+    private String documento;
+
     @Embedded
     private Direccion direccion;
 
-    public Paciente(DatosRegistroPaciente datosRegistroPaciente) {
+    private Boolean activo;
+
+    public Paciente(DatosRegistroPaciente datos) {
         this.activo = true;
-        this.nombre = datosRegistroPaciente.nombre();
-        this.email = datosRegistroPaciente.email();
-        this.telefono = datosRegistroPaciente.telefono();
-        this.documentoIdentidad = datosRegistroPaciente.documentoIdentidad();
-        this.direccion = new Direccion(datosRegistroPaciente.direccion());
+        this.nombre = datos.nombre();
+        this.email = datos.email();
+        this.telefono = datos.telefono();
+        this.documento = datos.documento();
+        this.direccion = new Direccion(datos.direccion());
     }
 
-    public void actualizarDatos(DatosActualizarPaciente datosActualizarPaciente) {
-        if (datosActualizarPaciente.nombre() != null){
-            this.nombre = datosActualizarPaciente.nombre();
+    public void actualizarInformacoes(DatosActualizacionPaciente datos) {
+        if (datos.nombre() != null) {
+            this.nombre = datos.nombre();
         }
-        if (datosActualizarPaciente.telefono() != null) {
-            this.documentoIdentidad = datosActualizarPaciente.telefono();
+        if (datos.telefono() != null) {
+            this.telefono = datos.telefono();
         }
-        if (datosActualizarPaciente.direccion() != null) {
-            this.direccion = direccion.actualizarDatos(datosActualizarPaciente.direccion());
+        if (datos.direccion() != null) {
+            this.direccion.actualizarDireccion(datos.direccion());
         }
+
     }
 
-    public void desactivarPaciente() {
+    public void eliminar() {
         this.activo = false;
     }
 }
